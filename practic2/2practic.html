@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function minOfNams(a, b) {
+    return a < b ? a : b;
+}
+
+function elevado(numero, elevado){
+    return numero ** elevado;
+}
+
+function calculate(alfa, beta, operator) {
+    switch (operator) {
+        case '+': return alfa + beta;
+        case '-': return alfa - beta;
+        case '*': return alfa * beta;
+        case '/': 
+            if (beta === 0) {
+                throw new Error("Ділення на нуль неможливе");
+            }
+            return alfa / beta;
+    }
+}
+
+function isPrime(n) {
+    if (n <= 1) return false;
+    if (n === 2) return true;
+    if (n % 2 === 0) return false;
+    
+    for (let i = 3; i <= Math.sqrt(n); i += 2) {
+        if (n % i === 0) return false;
+    }
+    return true;
+}
+
+function multiplicationTable(n) {
+    console.log(`Таблиця множення для ${n}:`);
+    for (let i = 1; i <= 10; i++) {
+        console.log(`${n} × ${i} = ${n * i}`);
+    }
+    console.log('');
+}
+
+function remainder(a, b) {
+    if (b === 0) {
+        throw new Error("Ділення на нуль неможливе");
+    }
+    return a - Math.floor(a / b) * b;
+}
+
+
+function sum(...numbers) {
+    if (numbers.length === 0 || numbers.length > 5) {
+        throw new Error("Функція приймає від 1 до 5 чисел");
+    }
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+function max(...numbers) {
+    if (numbers.length === 0 || numbers.length > 5) {
+        throw new Error("Функція приймає від 1 до 5 чисел");
+    }
+    return Math.max(...numbers);
+}
+
+function printNumbersInRange(start, end, even) {
+    console.log(`${even ? 'Парні' : 'Непарні'} числа в діапазоні [${start}, ${end}]:`);
+    const result = [];
+    for (let i = start; i <= end; i++) {
+        if (even && i % 2 === 0) {
+            result.push(i);
+        } else if (!even && i % 2 !== 0) {
+            result.push(i);
+        }
+    }
+    console.log(result.join(', '));
+    console.log('');
+}
+
+function isLeapYear(year) {
+    return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0);
+}
+
+console.log("Менше з 5 і 3:", minOfTwo(5, 3));
+console.log("2^3 =", power(2, 3));
+console.log("15 % 4 =", remainder(15, 4));
+console.log("Сума 1, 2, 3, 4, 5:", sum(1, 2, 3, 4, 5));
+console.log("Максимум 10, 20, 30:", max(10, 20, 30));
+printNumbersInRange(1, 10, true);
+printNumbersInRange(1, 10, false);
+console.log("2020 - високосний рік:", isLeapYear(2020));
+console.log("2021 - високосний рік:", isLeapYear(2021));
+    </script>
+</body>
+</html>
