@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrap">
+  <div class="top-bar">
+    <div class="email-display" id="emailDisplay"></div>
+    <button class="btn-exit" onclick="exitProfile()">Exit</button>
+  </div>
+ 
+  <div class="form-box">
+    <h2>User Info</h2>
+ 
+    <label for="firstName">Ім'я:</label>
+    <input type="text" id="firstName" maxlength="20">
+    <div class="error-msg" id="firstNameErr"></div>
+ 
+    <label for="lastName">Прізвище:</label>
+    <input type="text" id="lastName" maxlength="20">
+    <div class="error-msg" id="lastNameErr"></div>
+ 
+    <label for="birthYear">Рік народження:</label>
+    <input type="text" id="birthYear">
+    <div class="error-msg" id="birthYearErr"></div>
+ 
+    <label for="gender">Стать:</label>
+    <select id="gender">
+      <option value="">-- Оберіть --</option>
+      <option value="male">Чоловіча</option>
+      <option value="female">Жіноча</option>
+    </select>
+    <div class="error-msg" id="genderErr"></div>
+ 
+    <label for="phone">Номер телефону (необов'язково):</label>
+    <input type="text" id="phone" placeholder="+38 (050) 123-45-67">
+    <div class="error-msg" id="phoneErr"></div>
+ 
+    <label for="skype">Skype (необов'язково):</label>
+    <input type="text" id="skype" placeholder="live:username">
+    <div class="error-msg" id="skypeErr"></div>
+ 
+    <button class="btn-save" onclick="saveProfile()">Save</button>
+    <div class="success" id="successMsg"></div>
+  </div>
+</div>
+<script>
+  function setCookie(name, value, hours) {
+    const expires = new Date(Date.now() + hours * 3600 * 1000).toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expires + "; path=/";
+  }
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+  function deleteCookie(name) {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+  }
+ 
+ 
+  const userEmail = getCookie("userEmail");
+  if (!userEmail) window.location.href = "index.html";
+  document.getElementById("emailDisplay").textContent = userEmail;
+ 
+
+  const fields = ["firstName", "lastName", "birthYear", "gender", "phone", "skype"];
+  fields.forEach(function(f) {
+    const val = getCookie("prof_" + f);
+    if (val) document.getElementById(f).value = val;
+  });
+ 
+
+  function validateName(v, label) {
+    if (!v) return label + " є обов'язковим полем.";
+    if (v.length > 20) return "Максимум 20 символів.";
+    if (!/^[a-zA-Zа-яА-ЯіІїЇєЄёЁ']+$/.test(v)) return "Тільки літери.";
+    return "";
+  }
+  function validateBirthYear(v) {
+    if (!v) return "Рік народження є обов'язковим.";
+    const y = Number(v);
+    if (!/^\d{4}$/.test(v) || y < 1900 || y > new Date().getFullYear()) return "Діапазон: 1900 — " + new Date().getFullYear() + ".";
+    return "";
+  }
+  function validatePhone(v) {
+    if (!/^[\d\s()\-]+$/.test(v)) return "Лише цифри, пробіл, (), -.";//!/^[a-zA-Z0-9.\-] google
+    const digits = v.replace(/\D/g, "");
+    if (digits.length < 10 || digits.length > 12) return "У номері має бути 10–12 цифр.";
+    return "";
+  }
+  function validateSkype(v) {
+    if (!/^[a-zA-Z0-9.\-]+$/.test(v)) return "Лише літери, цифри, . та -.";//!/^[a-zA-Z0-9.\-] google
+    return "";
+  }
+ 
+  function setError(id, errId, msg) {
+    document.getElementById(errId).textContent = msg;
+    document.getElementById(id).classList.toggle("error", !!msg);
+  }
+
+  function saveProfile() {
+    const fName  = document.getElementById("firstName").value.trim();
+    const lName  = document.getElementById("lastName").value.trim();
+    const bYear  = document.getElementById("birthYear").value.trim();
+    const gender = document.getElementById("gender").value;
+    const phone  = document.getElementById("phone").value.trim();
+    const skype  = document.getElementById("skype").value.trim();
+ 
+    const e1 = validateName(fName, "Ім'я");
+    const e2 = validateName(lName, "Прізвище");
+    const e3 = validateBirthYear(bYear);
+    const e4 = !gender ? "Стать є обов'язковим полем." : "";
+    const e5 = validatePhone(phone);
+    const e6 = validateSkype(skype);
+ 
+    setError("firstName","firstNameErr",e1);
+    setError("lastName","lastNameErr",e2);
+    setError("birthYear","birthYearErr",e3);
+    setError("gender","genderErr",e4);
+    setError("phone","phoneErr",e5);
+    setError("skype","skypeErr",e6);
+ 
+    if (!e1 && !e2 && !e3 && !e4 && !e5 && !e6) {
+      setCookie("prof_firstName",fName,1);
+      setCookie("prof_lastName",lName,1);
+      setCookie("prof_birthYear",bYear,1);
+      setCookie("prof_gender",gender,1);
+      setCookie("prof_phone",phone,1);
+      setCookie("prof_skype",skype,1);
+      document.getElementById("successMsg").textContent = "Дані збережено!";
+      setTimeout(function() { document.getElementById("successMsg").textContent = ""; }, 2000);
+    }
+  }
+ 
+  function exitProfile() {
+    ["userEmail","prof_firstName","prof_lastName","prof_birthYear","prof_gender","prof_phone","prof_skype"]
+      .forEach(deleteCookie);
+    window.location.href = "index.html";
+  }
+
+</script>
+</body>
+</html>

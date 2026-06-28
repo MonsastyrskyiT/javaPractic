@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+      <div class="form-box">
+    <h2>Registration</h2>
+ 
+    <label for="email">Email:</label>
+    <input type="text" id="email">
+    <div class="error-msg" id="emailError"></div>
+ 
+    <label for="password">Password:</label>
+    <input type="password" id="password">
+    <div class="error-msg" id="passwordError"></div>
+ 
+    <label for="repeat">Repeat:</label>
+    <input type="password" id="repeat">
+    <div class="error-msg" id="repeatError"></div>
+ 
+    <button class="btn" onclick="signUp()">Sign Up</button>
+  </div>
+
+  <script>
+      function setCookie(name, value, hours) {
+    const expires = new Date(Date.now() + hours * 3600 * 1000).toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expires + "; path=/";
+  }
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+  if (getCookie("userEmail")) window.location.href = "profile.html";
+ 
+  function validateEmail(v) {
+    if (!v) return "Email є обов'язковим полем.";
+    if (!/^[a-zA-Z0-9.\-_]+@[^@]+$/.test(v)) return "Лише літери, цифри, . - _ та символ @.";
+    if (v.split("@")[0].length < 3) return "До @ має бути мінімум 3 символи.";
+    if (!v.split("@")[1]) return "Після @ має бути домен.";
+    return "";
+  }
+  function validatePassword(v) {
+    if (!v) return "Пароль є обов'язковим полем.";
+    if (v.length < 6) return "Мінімум 6 символів.";
+    if (!/[a-z]/.test(v)) return "Потрібна мінімум 1 літера нижнього регістра.";
+    if (!/[A-Z]/.test(v)) return "Потрібна мінімум 1 літера верхнього регістра.";
+    if (!/[0-9]/.test(v)) return "Потрібна мінімум 1 цифра.";
+    return "";
+  }
+  function setError(inputId, errId, msg) {
+    document.getElementById(errId).textContent = msg;
+    document.getElementById(inputId).classList.toggle("error", !!msg);
+  }
+  function signUp() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const repeat = document.getElementById("repeat").value;
+    const e1 = validateEmail(email);
+    const e2 = validatePassword(password);
+    const e3 = !repeat ? "Підтвердження є обов'язковим." : (password !== repeat ? "Паролі не збігаються." : "");
+    setError("email", "emailErr", e1);
+    setError("password", "passwordErr", e2);
+    setError("repeat", "repeatErr", e3);
+    if (!e1 && !e2 && !e3) {
+      setCookie("userEmail", email, 1);
+      window.location.href = "profile.html";
+    }
+  }
+  </script>
+</body>
+</html>
