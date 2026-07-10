@@ -1,0 +1,179 @@
+ <!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Classes Demo</title>
+  
+</head>
+<body>
+<h1> PrintMachine</h1>
+<div id="print-output"></div>
+
+<h1> News</h1>
+<div id="news-output"></div>
+
+
+<h1>NewsFeed</h1>
+
+<h2>Всі новини (відсортовані за датою) <span class="count-badge" id="total-count"></span></h2>
+<div id="feed-output"></div>
+
+<h2>Пошук за тегом <code>#frontend</code> <span class="count-badge" id="tag-count"></span></h2>
+<div id="tag-output"></div>
+
+<h2>Після видалення "Node.js 22 Released" <span class="count-badge" id="after-count"></span></h2>
+<div id="after-output"></div>
+
+
+<script>
+
+function renderNews(news, container) {
+  const card = document.createElement("div");
+  card.className = "news-card";
+  card.innerHTML = `
+    <h3>${news.title}</h3>
+    <div class="date">${news._getDateLabel()}</div>
+    <div class="text">${news.text}</div>
+    <div class="tags">${news.tags.map(t => "#" + t).join(" ")}</div>`;
+  container.appendChild(card);
+}
+
+
+//1 
+
+class PrintMachine {
+  constructor(fontSize, fontColor, fontFamily) {
+    this.fontSize   = fontSize;
+    this.fontColor  = fontColor;
+    this.fontFamily = fontFamily;
+  }
+
+  print(text) {
+    const el = document.createElement("p");
+    el.style.fontSize   = this.fontSize + "px";
+    el.style.color      = this.fontColor;
+    el.style.fontFamily = this.fontFamily;
+    el.style.margin     = "4px 0";
+    el.textContent      = text;
+    document.getElementById("print-output").appendChild(el);
+  }
+}
+
+const pm1 = new PrintMachine(26, "steelblue", "Arial");
+pm1.print("Привіт від PrintMachine!");
+pm1.print("Великий синій Arial.");
+
+const pm2 = new PrintMachine(15, "darkgreen", "Courier New");
+pm2.print("Маленький зелений Courier New.");
+
+const pm3 = new PrintMachine(20, "crimson", "Georgia");
+pm3.print("Червоний Georgia — теж красиво.");
+
+//2 
+
+class News {
+  constructor(title, text, tags, date) {
+    this.title = title;
+    this.text  = text;
+    this.tags  = tags;
+    this.date  = date;
+  }
+
+  _getDateLabel() {
+    const diffMs   = Date.now() - this.date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays < 1) return "сьогодні";
+    if (diffDays < 7) return diffDays + " " + (diffDays === 1 ? "день" : "днів") + " тому";
+    const d = String(this.date.getDate()).padStart(2, "0");
+    const m = String(this.date.getMonth() + 1).padStart(2, "0");
+    return `${d}.${m}.${this.date.getFullYear()}`;
+  }
+
+  print(container) {
+    renderNews(this, container || document.getElementById("news-output"));
+  }
+}
+
+
+const demoNews = new News(
+  "What is Lorem Ipsum?",
+  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+  ["lorem", "ipsum", "text"],
+  new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)  // 2 дні тому
+);
+demoNews.print();
+
+// 3 
+
+class NewsFeed {
+  constructor() {
+    this._news = [];
+  }
+
+  get count() {
+    return this._news.length;
+  }
+
+  add(newsItem) {
+    this._news.push(newsItem);
+  }
+
+  remove(title) {
+    this._news = this._news.filter(n => n.title !== title);
+  }
+
+  sortByDate() {
+    this._news.sort((a, b) => b.date - a.date);
+  }
+
+  findByTag(tag) {
+    return this._news.filter(n => n.tags.includes(tag));
+  }
+
+  printAll(container) {
+    this._news.forEach(n => renderNews(n, container));
+  }
+}
+
+const feed = new NewsFeed();
+
+feed.add(new News(
+  "JavaScript ES2024",
+  "У новому стандарті JavaScript з'явились зручні методи для роботи з масивами та об'єктами.",
+  ["javascript", "tech", "news"],
+  new Date()
+));
+feed.add(new News(
+  "CSS Container Queries",
+  "Container Queries дозволяють писати адаптивні стилі відносно батьківського контейнера.",
+  ["css", "frontend", "tech"],
+  new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+));
+feed.add(new News(
+  "Node.js 22 Released",
+  "Вийшла нова LTS-версія Node.js з підтримкою ESM та покращеною продуктивністю.",
+  ["nodejs", "backend", "tech"],
+  new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+));
+feed.add(new News(
+  "Web Assembly набирає популярність",
+  "WASM стає ключовою технологією для запуску високопродуктивного коду в браузері.",
+  ["wasm", "tech", "frontend"],
+  new Date(2024, 10, 15)
+));
+
+feed.sortByDate();
+document.getElementById("total-count").textContent = feed.count;
+feed.printAll(document.getElementById("feed-output"));
+
+const frontendNews = feed.findByTag("frontend");
+document.getElementById("tag-count").textContent = frontendNews.length;
+frontendNews.forEach(n => renderNews(n, document.getElementById("tag-output")));
+
+
+feed.remove("Node.js 22 Released");
+document.getElementById("after-count").textContent = feed.count;
+feed.printAll(document.getElementById("after-output"));
+</script>
+</body>
+</html>

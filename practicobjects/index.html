@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+const rect = {
+  topLeft:  { x: 1, y: 6 },
+  botRight: { x: 5, y: 2 },
+};
+// 1
+function printInfo(r) {
+  console.log(
+    "Прямокутник:\n" +
+    "  Ліва верхня точка:  (" + r.topLeft.x  + ", " + r.topLeft.y  + ")\n" +
+    "  Права нижня точка: ("  + r.botRight.x + ", " + r.botRight.y + ")"
+  );
+}
+
+// 2
+function getWidth(r) {
+  return Math.abs(r.botRight.x - r.topLeft.x);
+}
+
+
+// 3 
+
+function getHeight(r) {
+  return Math.abs(r.botRight.y - r.topLeft.y);
+}
+// 4
+function getArea(r) {
+  return getWidth(r) * getHeight(r);
+}
+
+// 5
+function getPerimeter(r) {
+  return 2 * (getWidth(r) + getHeight(r));
+}
+
+
+// 6
+function changeWidth(r, dx) {
+  r.botRight.x += dx;
+}
+
+
+// 7
+function changeHeight(r, dy) {
+  r.botRight.y -= dy; 
+}
+// 8
+function changeSize(r, dx, dy) {
+  changeWidth(r, dx);
+  changeHeight(r, dy);
+}
+
+// 9
+function moveX(r, dx) {
+  r.topLeft.x  += dx;
+  r.botRight.x += dx;
+}
+
+
+// 10
+function moveY(r, dy) {
+  r.topLeft.y  += dy;
+  r.botRight.y += dy;
+}
+
+// 11
+
+function move(r, dx, dy) {
+  moveX(r, dx);
+  moveY(r, dy);
+}
+
+// 12
+function isPointInside(r, px, py) {
+  const xMin = Math.min(r.topLeft.x, r.botRight.x);
+  const xMax = Math.max(r.topLeft.x, r.botRight.x);
+  const yMin = Math.min(r.topLeft.y, r.botRight.y);
+  const yMax = Math.max(r.topLeft.y, r.botRight.y);
+
+  return px >= xMin && px <= xMax && py >= yMin && py <= yMax;
+}
+
+//testing
+
+printInfo(rect);
+
+console.log("\nШирина:", getWidth(rect));
+console.log("Висота:", getHeight(rect));
+console.log("Площа:", getArea(rect));
+console.log("Периметр:", getPerimeter(rect));
+
+changeWidth(rect, 3);
+printInfo(rect);
+
+changeHeight(rect, 2);
+printInfo(rect);
+
+move(rect, 1, 1);
+printInfo(rect);
+
+console.log(isPointInside(rect, 4, 4));
+
+console.log(isPointInside(rect, 20, 20));
+    </script>
+</body>
+</html>
