@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>polimorfizm</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; background: #ffffff; }
+    h1 { font-size: 20px; margin: 30px 0 12px; border-bottom: 2px solid #ccc; padding-bottom: 6px; }
+    .section { background: #79b773; border: 1px solid #4f8462; border-radius: 6px; padding: 20px; margin-bottom: 20px; }
+    .info-row { margin: 6px 0; font-size: 15px; }
+    pre { background: #625656; padding: 10px; border-radius: 4px; font-size: 13px; overflow: auto; margin-top: 10px; }
+    table.shapes { border-collapse: collapse; width: 100%; font-size: 14px; }
+    table.shapes th { background: #2c5f9e; color: #5d4c71; padding: 10px 14px; text-align: left; }
+    table.shapes td { padding: 9px 14px; border-bottom: 1px solid #767676; }
+    table.shapes tr:nth-child(even) td { background: #ffffff; }
+  </style>
+</head>
+<body>
+
+<h1>Завдання 1</h1>
+<div class="section" id="btn-out"></div>
+
+<h1>Завдання 2</h1>
+<div class="section" id="shapes-out"></div>
+
+<h1>Завдання 3</h1>
+<div class="section" id="arr-out"></div>
+
+<script>
+//1
+
+class Button {
+  constructor(width, height, text) {
+    this.width  = width;
+    this.height = height;
+    this.text   = text;
+  }
+
+  showBtn() {
+    const btn = document.createElement("button");
+    btn.textContent   = this.text;
+    btn.style.width   = this.width  + "px";
+    btn.style.height  = this.height + "px";
+    btn.style.margin  = "6px";
+    btn.style.cursor  = "pointer";
+    document.getElementById("btn-out").appendChild(btn);
+  }
+}
+
+class BootstrapButton extends Button {
+  constructor(width, height, text, color) {
+    super(width, height, text);
+    this.color = color;
+  }
+
+  showBtn() {
+    const colorMap = {
+      primary:   { bg: "#0d6efd", hover: "#0b5ed7", text: "#fff" },
+      success:   { bg: "#198754", hover: "#157347", text: "#fff" },
+      danger:    { bg: "#dc3545", hover: "#b02a37", text: "#fff" },
+      warning:   { bg: "#ffc107", hover: "#d4a017", text: "#212529" },
+      secondary: { bg: "#6c757d", hover: "#5c636a", text: "#fff" },
+    };
+
+    const c = colorMap[this.color] || { bg: this.color, hover: this.color, text: "#fff" };
+
+    const btn = document.createElement("button");
+    btn.textContent     = this.text;
+    btn.style.width     = this.width  + "px";
+    btn.style.height    = this.height + "px";
+    btn.style.margin    = "6px";
+    btn.style.cursor    = "pointer";
+    btn.style.background    = c.bg;
+    btn.style.color         = c.text;
+    btn.style.border        = "none";
+    btn.style.borderRadius  = "6px";
+    btn.style.fontSize      = "14px";
+    btn.style.fontWeight    = "500";
+    btn.style.transition    = "background 0.2s";
+    btn.addEventListener("mouseenter", () => btn.style.background = c.hover);
+    btn.addEventListener("mouseleave", () => btn.style.background = c.bg);
+
+    document.getElementById("btn-out").appendChild(btn);
+  }
+}
+
+new Button(120, 36, "Звичайна").showBtn();
+new BootstrapButton(140, 38, "Primary",   "primary").showBtn();
+new BootstrapButton(140, 38, "Success",   "success").showBtn();
+new BootstrapButton(140, 38, "Danger",    "danger").showBtn();
+new BootstrapButton(140, 38, "Warning",   "warning").showBtn();
+new BootstrapButton(140, 38, "Secondary", "secondary").showBtn();
+
+//2 
+
+class Shape {
+  get name() { return "Фігура"; }
+
+  info()      { return "—"; }
+  area()      { return 0; }
+  perimeter() { return 0; }
+}
+
+class Square extends Shape {
+  constructor(side) {
+    super();
+    this.side = side;
+  }
+
+  get name() { return "Квадрат"; }
+
+  info() { return `Сторона: ${this.side}`; }
+
+  area()      { return +(this.side ** 2).toFixed(4); }
+  perimeter() { return +(4 * this.side).toFixed(4); }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    super();
+    this.width  = width;
+    this.height = height;
+  }
+
+  get name() { return "Прямокутник"; }
+
+  info() { return `Ширина: ${this.width}, Висота: ${this.height}`; }
+
+  area()      { return +(this.width * this.height).toFixed(4); }
+  perimeter() { return +(2 * (this.width + this.height)).toFixed(4); }
+}
+
+class Triangle extends Shape {
+  constructor(a, b, c) {
+    super();
+    this.a = a; this.b = b; this.c = c;
+  }
+
+  get name() { return "Трикутник"; }
+
+  info() { return `Сторони: ${this.a}, ${this.b}, ${this.c}`; }
+
+  perimeter() { return +(this.a + this.b + this.c).toFixed(4); }
+
+  area() {
+    const s = this.perimeter() / 2;
+    return +(Math.sqrt(s * (s - this.a) * (s - this.b) * (s - this.c))).toFixed(4);
+  }
+}
+
+const shapes = [
+  new Square(5),
+  new Rectangle(8, 3),
+  new Triangle(3, 4, 5),
+  new Square(10),
+  new Rectangle(6, 6),
+  new Triangle(5, 12, 13),
+];
+
+
+const rows = shapes.map(s => `
+  <tr>
+    <td>${s.name}</td>
+    <td>${s.info()}</td>
+    <td>${s.area()}</td>
+    <td>${s.perimeter()}</td>
+  </tr>`).join("");
+
+document.getElementById("shapes-out").innerHTML = `
+  <table class="shapes">
+    <thead>
+      <tr><th>Фігура</th><th>Сторони</th><th>Площа</th><th>Периметр</th></tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+
+// 3
+
+class ExtendedArray extends Array {
+
+  // Рядок через роздільник
+  getString(separator = ", ") {
+    return this.join(separator);
+  }
+
+  // HTML: кожен елемент в тег; якщо li — обгортаємо в ul
+  getHtml(tagName) {
+    const items = Array.from(this)
+      .map(el => `<${tagName}>${el}</${tagName}>`)
+      .join("");
+    return tagName === "li" ? `<ul>${items}</ul>` : items;
+  }
+}
+
+// Демонстрація
+const arr = new ExtendedArray();
+arr.push("HTML", "CSS", "JavaScript", "TypeScript", "Node.js");
+
+const out3 = document.getElementById("arr-out");
+
+function addBlock(label, content, isHtml = false) {
+  const div = document.createElement("div");
+  div.style.marginBottom = "14px";
+  const title = document.createElement("b");
+  title.textContent = label + ": ";
+  div.appendChild(title);
+  if (isHtml) {
+    const wrap = document.createElement("div");
+    wrap.style.marginTop = "4px";
+    wrap.innerHTML = content;
+    div.appendChild(wrap);
+  } else {
+    const pre = document.createElement("pre");
+    pre.textContent = content;
+    div.appendChild(pre);
+  }
+  out3.appendChild(div);
+}
+
+addBlock('getString(", ")',   arr.getString(", "));
+addBlock('getString(" — ")',  arr.getString(" — "));
+addBlock('getString(" | ")',  arr.getString(" | "));
+addBlock('getHtml("p")',      arr.getHtml("p"),  true);
+addBlock('getHtml("li")',     arr.getHtml("li"), true);
+addBlock('getHtml("span")',   arr.getHtml("span"), true);
+
+</script>
+</body>
+</html>
