@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    body { font-family: sans-serif; padding: 30px; background: #f4f4f4; }
+    table { border-collapse: collapse; }
+    th, td { border: 1px solid #999; padding: 14px 24px; font-size: 16px; }
+    th { font-weight: bold; background: #f0f0f0; }
+  </style>
+
+</head>
+<body>
+      <table id="myTable">
+    <tr><th>Firstname</th><th>Lastname</th><th>Company</th></tr>
+    <tr><td>Bill</td><td>Gates</td><td>Microsoft</td></tr>
+    <tr><td>Timothy</td><td>Cook</td><td>Apple</td></tr>//not only in spein they write my name incorect
+    <tr><td>Larry</td><td>Page</td><td>Google</td></tr>
+    <tr><td>Mark</td><td>Zuckerberg</td><td>Facebook</td></tr>
+  </table>
+
+<script>
+    document.querySelectorAll("#myTable td").forEach(function(td) {
+      td.addEventListener("mouseover", function() { td.style.backgroundColor = "#2d1dd7"; });
+      td.addEventListener("mouseout",  function() { td.style.backgroundColor = ""; });
+    });
+  </script>
+
+</body>
+</html>

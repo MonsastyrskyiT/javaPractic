@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; max-width: 760px; margin: 0 auto; padding: 30px 20px; background: #f9f9f9; color: #333; }
+    h1 { font-size: 22px; margin-bottom: 24px; }
+    article { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 20px 24px; margin-bottom: 20px; }
+    article h2 { font-size: 17px; margin-bottom: 10px; }
+    article p  { font-size: 14px; line-height: 1.7; color: #555; }
+ 
+    #scrollTopBtn {
+      position: fixed; bottom: 28px; right: 28px;
+      width: 48px; height: 48px;
+      background: #4a7aad; color: #fff;
+      border: none; border-radius: 50%;
+      font-size: 22px; cursor: pointer;
+      display: none; align-items: center; justify-content: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+    #scrollTopBtn:hover { background: #2c5f9e; }
+    #scrollTopBtn.visible { display: flex; }
+  </style>
+</head>
+<body>
+      <h1>Список статей</h1>
+ 
+  <article><h2>What is Lorem Ipsum?</h2><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p></article>
+  <article><h2>Where does it come from?</h2><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words.</p></article>
+  <article><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using "Content here, content here".</p></article>
+  <article><h2>Where can I get some?</h2><p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p></article>
+  <article><h2>The standard Lorem Ipsum passage</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></article>
+  <article><h2>Section 1.10.32</h2><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></article>
+  <article><h2>1914 translation by H. Rackham</h2><p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth.</p></article>
+ 
+  <button id="scrollTopBtn" title="Вгору">↑</button>
+
+
+  <script>
+    var btn = document.getElementById("scrollTopBtn");
+ 
+    window.addEventListener("scroll", function() {
+      if (window.scrollY > 100) btn.classList.add("visible");
+      else                       btn.classList.remove("visible");
+    });
+ 
+    btn.addEventListener("click", function() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+
+</body>
+</html>
